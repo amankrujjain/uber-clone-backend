@@ -12,14 +12,19 @@ This project is a Node.js application that provides a user registration API. It 
    - Store user details in a MongoDB database.
    - Generate authentication tokens using `JWT`.
 
-2. **Validation**:
+2. **User Login**:
+   - Validate user input (email and password).
+   - Authenticate user credentials.
+   - Generate authentication tokens using `JWT`.
+
+3. **Validation**:
    - Input validation using `express-validator`.
    - Enforces rules for:
      - Email format.
      - First name minimum length.
      - Password strength.
 
-3. **Modular Code Structure**:
+4. **Modular Code Structure**:
    - Routes, controllers, models, and services are modularized for scalability and maintainability.
 
 ---
@@ -78,7 +83,61 @@ This project is a Node.js application that provides a user registration API. It 
   ]
 }
 ```
+2. User Login
 
+Endpoint: POST /users/login
+
+Description: Logs in an existing user.
+
+Request Body:
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+ - Validations:
+
+Email: Must be a valid email format.
+Password: Minimum 6 characters.
+Response:
+
+Success: HTTP 200
+
+```json
+{
+  "success": true,
+  "message": "User logged in successfully",
+  "user": {
+    "_id": "unique_user_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  },
+  "token": "jwt_token"
+}
+```
+ - Validation Errors: HTTP 400
+
+ ```json
+    {
+  "success": false,
+  "message": "Validation failed",
+  "errors": [
+    { "msg": "Invalid Email", "param": "email", "location": "body" },
+    { "msg": "Password must be at least 6 characters", "param": "password", "location": "body" }
+  ]
+}
+ ```
+- Authentication Errors: HTTP 401
+```json
+  {
+  "success": false,
+  "message": "Invalid email or password"
+}
+```
 ---
 
 ## **Technologies Used**
