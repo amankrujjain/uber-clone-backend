@@ -14,13 +14,28 @@ const registerUser = async( req,res,next )=>{
             })
         };
 
-        const {firstname, lastname, email, password} = req.body;
+        const {fullname, email, password} = req.body;
 
         const hashPassword = await userModel.hashPassword(password);
 
+        const user = await userService.createUser({
+            firstname: fullname.firstname,
+            lastname: fullname.lastname,
+            email,
+            password: hashPassword
+        })
+
+        const token = user.generateAuthToken();
+
+        res.status(201).json({
+            success: true,
+            message: 'User created successfully',
+            user: user,
+            token: token
+        })
 
     } catch (error) {
-        
+        console.log(error)
     }
 };
 
